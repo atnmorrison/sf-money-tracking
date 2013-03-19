@@ -1,0 +1,303 @@
+<apex:page controller="ConfigurationController" setup="true">
+	
+	<!-- Combo-handled YUI CSS files: --> 
+	<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/combo?2.7.0/build/assets/skins/sam/skin.css"> 
+	<!-- Combo-handled YUI JS files: --> 
+	<script type="text/javascript" src="http://yui.yahooapis.com/combo?2.7.0/build/utilities/utilities.js&2.7.0/build/slider/slider-min.js&2.7.0/build/colorpicker/colorpicker-min.js&2.7.0/build/container/container-min.js"></script> 
+
+	<script type="text/javascript">
+	
+	//create a namespace object in the example namespace:
+	YAHOO.namespace("stg.colorpicker")
+	
+	//create a new object for this module:
+	YAHOO.stg.colorpicker.inDialog = function() {
+	
+		//Some shortcuts to use in our example:
+		var Event=YAHOO.util.Event,
+			Dom=YAHOO.util.Dom,
+			lang=YAHOO.lang;
+	
+		return {
+		
+			//In our initialization function, we'll create the dialog;
+			//in its render event, we'll create our Color Picker instance.
+	        init: function() {
+	        
+	        	if('view' == '{!Mode}') {
+	        		saveExpenseTypes(); 
+	        	}
+	        
+	        	this.inputid = ''
+	            // Instantiate the Dialog
+	            this.dialog = new YAHOO.widget.Dialog("yui-picker-panel", { 
+					width : "500px",
+					close: true,
+					fixedcenter : true,
+					visible : false, 
+					constraintoviewport : true,
+					buttons : [ { text:"Select", handler:this.handleSubmit, isDefault:true },
+								{ text:"Cancel", handler:this.handleCancel } ]
+	             });
+	 
+				// Once the Dialog renders, we want to create our Color Picker
+				// instance.
+	            this.dialog.renderEvent.subscribe(function() {
+					if (!this.picker) { //make sure that we haven't already created our Color Picker
+						YAHOO.log("Instantiating the color picker", "info", "example");
+						this.picker = new YAHOO.widget.ColorPicker("yui-picker", {
+							container: this.dialog,
+							images: {
+								PICKER_THUMB: "{!$Resource.picker_thumb}",
+								HUE_THUMB: "{!$Resource.hue_thumb}"
+							}
+							//Here are some other configurations we could use for our Picker:
+							//showcontrols: false,  // default is true, false hides the entire set of controls
+							//showhexcontrols: true, // default is false
+							//showhsvcontrols: true  // default is false
+						});
+	
+						//listen to rgbChange to be notified about new values
+						this.picker.on("rgbChange", function(o) {
+							//YAHOO.log(lang.dump(o), "info", "example");
+						});
+					}
+				});	
+				
+				// If we wanted to do form validation on our Dialog, this
+				// is where we'd do it.  Remember to return true if validation
+				// passes; otherwise, your Dialog's submit method won't submit.
+	            this.dialog.validate = function() {
+					return true;
+	            };
+	
+	            // Wire up the success and failure handlers
+	            this.dialog.callback = { success: this.handleSuccess, thisfailure: this.handleFailure };
+	            
+	            // We're all set up with our Dialog's configurations;
+				// now, render the Dialog
+	            this.dialog.render();
+				
+				// We can wrap up initialization by wiring all of the buttons in our
+				// button dashboard to selectively show and hide parts of the
+				// Color Picker interface.  Remember that "Event" here is an
+				// alias for YAHOO.util.Event and "Event.on" is therfor a shortcut
+				// for YAHOO.util.Event.onAvailable -- the standard Dom event attachment
+				// method:
+	            Event.on("pickdark", "click", this.handleShow, "pickdark");
+				Event.on("picklight", "click", this.handleShow, "picklight");
+				
+			},
+			
+			handleShow: function(event, element) {
+				YAHOO.stg.colorpicker.inDialog.inputid = element;
+				YAHOO.stg.colorpicker.inDialog.dialog.show(); 
+			},
+			
+			//We'll wire this to our Dialog's submit button:
+			handleSubmit: function() {
+				//submit the Dialog:
+				//this.submit();
+				var color;
+				if(YAHOO.stg.colorpicker.inDialog.inputid == 'pickdark') {
+					color = new YAHOO.util.Element('{!$Component.attribute_form.attribute_block.attribute_section.dark_color_item.darkcolor}');
+				} else {
+					color = new YAHOO.util.Element('{!$Component.attribute_form.attribute_block.attribute_section.light_color_item.lightcolor}');
+				}
+				
+				var hex = new YAHOO.util.Element('yui-picker-hex'); 
+				color.set('value', hex.get('value'));
+				this.hide(); 
+			},
+	 
+	 		//If the Dialog's cancel button is clicked,
+			//this function fires
+			handleCancel: function() {
+				//the cancel method automatically hides the Dialog:
+				this.cancel();
+			},
+			
+			//We'll use Connection Manager to post our form data to the
+			//server; here, we set up our "success" handler.
+			handleSuccess: function(o) {
+				YAHOO.log("Connection Manager returned results to the handleSuccess method.", "info", "example");
+				var response = o.responseText;
+				//On Yahoo servers, we may get some page stamping;
+				//we can trim off the trailing comment:
+				response = response.split("<!")[0];
+				//write the response to the page:
+				response = "<strong>The data received by the server was the following:</strong> " + response;
+				document.getElementById("resp").innerHTML = response;
+			},
+			
+			handleFailure: function(o) {
+				YAHOO.log("Connection Manager returned results to the handleFailure method.", "error", "example");
+				YAHOO.log("Response object:" + lang.dump(o), "error", "example");
+			}
+	   
+		}
+	}();
+	
+	//The earliest safe moment to instantiate a Dialog (or any
+	//Container element is onDOMReady; we'll initialize then:
+	YAHOO.util.Event.onDOMReady(YAHOO.stg.colorpicker.inDialog.init, YAHOO.stg.colorpicker.inDialog, true);
+	
+	</script>
+
+	<apex:sectionHeader title="Expense Management" subtitle="Configuration" />
+
+	<body class=" yui-skin-sam">
+	
+	<apex:form rendered="{!Mode == 'view'}">
+		<apex:pageBlock title="Attributes" >
+			<apex:pageBlockButtons >
+				<apex:commandButton action="{!Edit}" value="Edit" />
+			</apex:pageBlockButtons>
+			<apex:pageBlockSection columns="1">
+				<apex:pageBlockSectionItem >
+					Logo <apex:image value="/servlet/servlet.FileDownload?file={!Logo}" />
+				</apex:pageBlockSectionItem>
+				<apex:pageBlockSectionItem >
+					Dark Color
+					<apex:outputPanel >
+						<div style="width: 15px; height: 15px; background-color: #{!DarkColor}">&nbsp;</div>
+					</apex:outputPanel>
+				</apex:pageBlockSectionItem>				
+				<apex:pageBlockSectionItem >
+					Light Color
+					<apex:outputPanel >
+						<div style="width: 15px; height: 15px; background-color: #{!LightColor}">&nbsp;</div>
+					</apex:outputPanel>
+				</apex:pageBlockSectionItem>
+				<apex:pageBlockSectionItem >
+					Currency
+					<apex:outputText value="{!CurrencyString}" />
+				</apex:pageBlockSectionItem>
+			</apex:pageBlockSection>
+		</apex:pageBlock>
+	</apex:form>
+
+	
+		<apex:form rendered="{!Mode == 'edit'}" id="attribute_form">
+			<apex:pageBlock title="Attributes" id="attribute_block">
+				<apex:pageBlockButtons >
+					<apex:commandButton action="{!save}" value="Save" />
+					<apex:commandButton action="{!cancel}" value="Cancel" immediate="true" />
+				</apex:pageBlockButtons>
+				<apex:pageBlockSection columns="1" id="attribute_section">
+					<apex:pageBlockSectionItem >
+						Logo
+						<apex:inputFile value="{!newDocument.body}" filename="{!newDocument.name}" />
+					</apex:pageBlockSectionItem>
+					<apex:pageBlockSectionItem id="dark_color_item">
+						Dark Color #
+						<apex:outputPanel >
+							<apex:inputText id="darkcolor" value="{!DarkColor}" />
+							<button id="pickdark" onclick="return false;">Select Color</button>
+						</apex:outputPanel>
+					</apex:pageBlockSectionItem>				
+					<apex:pageBlockSectionItem id="light_color_item">
+						Light Color #
+						<apex:outputPanel >
+							<apex:inputText id="lightcolor" value="{!LightColor}" />
+							<button id="picklight" onclick="return false;">Select Color</button>
+						</apex:outputPanel>
+					</apex:pageBlockSectionItem>
+					<apex:pageBlockSectionItem >
+						Currency
+						<apex:inputText value="{!CurrencyString}" />
+					</apex:pageBlockSectionItem>
+				</apex:pageBlockSection>
+			</apex:pageBlock>
+		</apex:form>
+	
+	
+
+		<div id="picker1"></div>
+
+	<apex:form id="expense_type_table">
+		<apex:actionFunction action="{!saveExpenseTypes}" name="saveExpenseTypes" rerender="expense_type_table" />
+		<apex:actionFunction action="{!deleteExpenseType}" name="deleteExpenseType" rerender="expense_type_table">
+			<apex:param name="id" value="" />
+		</apex:actionFunction>
+		<apex:pageBlock title="Expense Types" rendered="{!Mode == 'view'}">
+			<apex:pageBlockButtons >
+				<apex:commandButton action="{!newExpenseType}" value="New" />
+			</apex:pageBlockButtons>
+			<apex:pageBlockTable value="{!expense_types}" var="expense_type">
+				<apex:column >
+					<apex:facet name="header">Actions</apex:facet>
+					<apex:outputLink value="/{!expense_type.Id}/e?retURL=%2Fapex%2Fstgem__Configuration">Edit</apex:outputLink> | <a href="#" onclick="if(confirm('Are you sure you wish to delete this expense type?')){deleteExpenseType('{!expense_type.Id}');} return false;">Del</a>
+				</apex:column>
+				<apex:column >
+					<apex:facet name="header">Name</apex:facet>
+					<apex:outputLink value="/{!expense_type.Id}"><apex:outputText value="{!expense_type.Name}" /></apex:outputLink>
+				</apex:column>
+				<apex:column >
+					<apex:facet name="header">Entry Type</apex:facet>
+					<apex:outputText value="{!expense_type.Entry_Type__c }" />
+				</apex:column>
+				<apex:column value="{!expense_type.Rate__c}" />
+				<apex:column value="{!expense_type.Log__c}" />
+				<apex:column value="{!expense_type.Show_Comment__c}" />
+				<apex:column value="{!expense_type.Has_Tax__c}" />
+				<apex:column >
+					<apex:facet name="header">Order</apex:facet>
+					<apex:outputPanel >
+						<table style="padding: 0; margin: 0;">
+						  <tr>
+						    <td style="padding: 0; margin: 0; width:16px;">
+								<apex:commandLink action="{!moveUp}" rerender="expense_type_table" rendered="{!expense_type.Order__c > 1}" >
+									<apex:param name="index" value="{!expense_type.Order__c}" />
+									<apex:image value="{!$Resource.up}" />
+								</apex:commandLink>
+								<apex:outputText value="&nbsp;" escape="false" rendered="{!expense_type.Order__c == 1}" />
+							</td>
+							<td style="padding: 0; margin: 0; width: 16px;">
+								<apex:commandLink action="{!moveDown}" rerender="expense_type_table" rendered="{!expense_type.Order__c < expense_types.size}">
+									<apex:param name="index" value="{!expense_type.Order__c}" />
+									<apex:image value="{!$Resource.down}" />
+								</apex:commandLink>
+								<apex:outputText value="&nbsp;" escape="false" rendered="{!expense_type.Order__c == expense_types.size}" />
+							</td>
+						  </tr>
+						</table>
+						
+					</apex:outputPanel>			
+				</apex:column>
+			</apex:pageBlockTable>
+		</apex:pageBlock>
+	</apex:form>
+
+	<apex:form >
+		<apex:pageBlock title="Tax Types" rendered="{!Mode == 'view'}">
+			<apex:pageBlockButtons >
+				<apex:commandButton action="{!newTaxType}" value="New" />
+			</apex:pageBlockButtons>
+			<apex:pageBlockTable value="{!tax_types}" var="tax_type">
+				<apex:column >
+					<apex:facet name="header">Actions</apex:facet>
+					<apex:outputLink value="/{!tax_type.Id}/e?retURL=%2Fapex%2Fstgem__Configuration">Edit</apex:outputLink> | <apex:commandLink action="{!deleteTaxType}"  onclick="return confirm('Are you sure you wish to delete this tax type?');" value="Del"><apex:param name="id" value="{!tax_type.Id}" /></apex:commandLink>
+				</apex:column>
+				<apex:column >
+					<apex:outputLink value="/{!tax_type.Id}"><apex:outputText value="{!tax_type.Name}" /></apex:outputLink>
+				</apex:column>
+				<apex:column value="{!tax_type.Rate__c}" />
+			</apex:pageBlockTable>
+		</apex:pageBlock>
+	</apex:form>
+
+	<div id="yui-picker-panel" class="yui-picker-panel"> 
+		<div class="hd">Please choose a color:</div> 
+			<div class="bd"> 
+	        	<form name="yui-picker-form" id="yui-picker-form" onsubmit="return false;"> 
+	        		<div class="yui-picker" id="yui-picker"></div> 
+	        	</form> 
+	    	</div> 
+	    <div class="ft"></div> 
+	</div>
+	 
+
+	 
+	</body>
+</apex:page>

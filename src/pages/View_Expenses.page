@@ -1,0 +1,21 @@
+<apex:page standardController="Event" extensions="eventViewController" >
+
+  <style type="text/css">
+	
+	.thPad {
+		padding: 5px;
+	}
+	
+  </style>
+
+	<div style="background-color: FFFFFF; overflow: auto; height: 200px; background-color: #f6f5f0;">
+	  <apex:dataTable value="{!expenses}" var="expense">
+	    <apex:column headerValue="Expense Type" headerClass="thPad" style="padding: 5px;" value="{!expense.Expense_Type__r.Name}" />
+	    <apex:column headerValue="Subtotal" headerClass="thPad" style="padding: 5px;" value="{!expense.Subtotal__c}"  />
+		<apex:column headerValue="Tax" headerClass="thPad" style="padding: 5px;" value="{!expense.Tax_Total__c}" />
+		<apex:column headerValue="Tip" headerClass="thPad" style="padding: 5px;" value="{!expense.Tip__c}" />
+	    <apex:column headerValue="Total" headerClass="thPad" style="padding: 5px;" value="{!expense.Total__c}" />
+	    <apex:column headerValue="Comment" headerClass="thPad" style="padding: 5px;" value="{!expense.Comment__c}" />
+	  </apex:dataTable> 
+  	</div>
+</apex:page>

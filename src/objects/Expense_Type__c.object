@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <deprecated>false</deprecated>
+    <enableActivities>false</enableActivities>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>false</enableHistory>
+    <enableReports>true</enableReports>
+    <fields>
+        <fullName>Auto_Calculate_Taxes__c</fullName>
+        <defaultValue>true</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Auto Calculate Taxes</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Entry_Type__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Specifies how expenses will be entered into the system. For example Millage is entered as the quantity of Miles travelled - for this type of expense quantity is selected. Meals are entered as a dollar amount - for this type of expense amount is selected.</inlineHelpText>
+        <label>Entry Type</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Amount</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Quantity</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Has_Tax__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Check this box if you would like users to be able specify taxes for this expense type</inlineHelpText>
+        <label>Has Tax</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Has_Tip__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Has Tip</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Log__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Check this box if you would like the expense to be rendered in log format in the monthly report</inlineHelpText>
+        <label>Log</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Order__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Field used to keep track of the display order for the expense types</description>
+        <externalId>false</externalId>
+        <label>Order</label>
+        <precision>5</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Rate__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>This is the rate to refund at. 
+In the case of amount expenses the rate is the percentage of the cost that is refunded. 
+In the case of quantity expenses the rate is the refund amount per item.</inlineHelpText>
+        <label>Rate</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Show_Comment__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Check this box if you would like comments for this expense type to be shown in the monthly report</inlineHelpText>
+        <label>Show Comment</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Tax_Included__c</fullName>
+        <defaultValue>true</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Tax Included in Entry</label>
+        <type>Checkbox</type>
+    </fields>
+    <label>Expense Type</label>
+    <nameField>
+        <label>Expense Type</label>
+        <type>Text</type>
+    </nameField>
+    <pluralLabel>Expense Types</pluralLabel>
+    <searchLayouts/>
+    <sharingModel>Read</sharingModel>
+</CustomObject>

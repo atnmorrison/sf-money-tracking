@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>Expense Group</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Expense Groups</value>
+    </caseValues>
+    <fields>
+        <label><!-- Activity Date --></label>
+        <name>ActivityDate__c</name>
+    </fields>
+    <fields>
+        <label><!-- Event Id --></label>
+        <name>EventId__c</name>
+    </fields>
+    <startsWith>Consonant</startsWith>
+</CustomObjectTranslation>

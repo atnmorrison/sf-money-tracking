@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>Expense Type</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Expense Types</value>
+    </caseValues>
+    <fields>
+        <label><!-- Auto Calculate Taxes --></label>
+        <name>Auto_Calculate_Taxes__c</name>
+    </fields>
+    <fields>
+        <help><!-- Specifies how expenses will be entered into the system. For example Millage is entered as the quantity of Miles travelled - for this type of expense quantity is selected. Meals are entered as a dollar amount - for this type of expense amount is selected. --></help>
+        <label><!-- Entry Type --></label>
+        <name>Entry_Type__c</name>
+        <picklistValues>
+            <masterLabel>Amount</masterLabel>
+            <translation><!-- Amount --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Quantity</masterLabel>
+            <translation><!-- Quantity --></translation>
+        </picklistValues>
+    </fields>
+    <fields>
+        <help><!-- Check this box if you would like users to be able specify taxes for this expense type --></help>
+        <label><!-- Has Tax --></label>
+        <name>Has_Tax__c</name>
+    </fields>
+    <fields>
+        <label><!-- Has Tip --></label>
+        <name>Has_Tip__c</name>
+    </fields>
+    <fields>
+        <help><!-- Check this box if you would like the expense to be rendered in log format in the monthly report --></help>
+        <label><!-- Log --></label>
+        <name>Log__c</name>
+    </fields>
+    <fields>
+        <label><!-- Order --></label>
+        <name>Order__c</name>
+    </fields>
+    <fields>
+        <help><!-- This is the rate to refund at. 
+In the case of amount expenses the rate is the percentage of the cost that is refunded. 
+In the case of quantity expenses the rate is the refund amount per item. --></help>
+        <label><!-- Rate --></label>
+        <name>Rate__c</name>
+    </fields>
+    <fields>
+        <help><!-- Check this box if you would like comments for this expense type to be shown in the monthly report --></help>
+        <label><!-- Show Comment --></label>
+        <name>Show_Comment__c</name>
+    </fields>
+    <fields>
+        <label><!-- Tax Included in Entry --></label>
+        <name>Tax_Included__c</name>
+    </fields>
+    <layouts>
+        <layout>Expense Type Layout</layout>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+    <startsWith>Consonant</startsWith>
+</CustomObjectTranslation>
